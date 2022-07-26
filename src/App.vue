@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import localAdapter from './LocalStorangeHelper'
+
 
 export default {
   name: 'App',
@@ -32,9 +34,9 @@ export default {
     return {
       title:' To do list',
       tasks:[
-        {id:1,name:'Làm đồ án'},
-        {id:2,name:'Nghiên cứu source'},
-        {id:3,name:'Học framework mới'}
+        {id:1,name:'Làm đồ án',isDone:false},
+        {id:2,name:'Nghiên cứu source',isDone:false},
+        {id:3,name:'Học framework mới',isDone:false}
       ]
     }
   },
@@ -43,15 +45,25 @@ export default {
       if(!this.tasks.name){
         return
       }
-      this.tasks.push({
+      const item={
         name:this.tasks.name,
-        del:''
-      })
+        del:'',
+        isDone:false
+      }
+      this.tasks.push(item)
+      localAdapter.saveTask(this.tasks)
       this.tasks.name='';
+    },
+    doneItem: function(task){
+      this.tasks.splice(this.tasks.indexOf(task),1);
     },
     deleteItem: function(task){
       this.tasks.splice(this.tasks.indexOf(task),1);
+      localAdapter.saveTask(this.tasks)
     }
+  },
+  created(){
+    this.tasks=localAdapter.getTask()
   }
 }
 </script>

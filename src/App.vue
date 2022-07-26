@@ -11,7 +11,9 @@
       <li class="task-list-item" v-for="task in tasks"
                 v-bind:key="task.id" >
         <label class="task-list-item-label">
-          <input type="checkbox">
+          <input type="checkbox"
+                  v-model="task.isDone"
+                  @change="doneItem()">
           <span>{{task.name}}</span>
         </label>
         <div class="task-list-control">
@@ -33,11 +35,7 @@ export default {
   data(){
     return {
       title:' To do list',
-      tasks:[
-        {id:1,name:'Làm đồ án',isDone:false},
-        {id:2,name:'Nghiên cứu source',isDone:false},
-        {id:3,name:'Học framework mới',isDone:false}
-      ]
+      tasks:[]
     }
   },
   methods:{
@@ -54,8 +52,8 @@ export default {
       localAdapter.saveTask(this.tasks)
       this.tasks.name='';
     },
-    doneItem: function(task){
-      this.tasks.splice(this.tasks.indexOf(task),1);
+    doneItem: function(){
+      localAdapter.saveTask(this.tasks)
     },
     deleteItem: function(task){
       this.tasks.splice(this.tasks.indexOf(task),1);

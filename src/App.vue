@@ -1,28 +1,29 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="app-container">
+    <h1 class="app-header">Vue TODO LIST</h1>
+
+    <div class="add-task">
+      <input type="text" placeholder="Add new task" class="task-input">
+      <input type="submit" class="submit-task" value="" title="add-task">
+    </div>
+
+    <ul class="task-list">
+      <li class="task">
+        <label class="task-list-item-label">
+          <input type="checkbox">
+          <span>Task</span>
+        </label>
+        <span class="delete-btn" title="delete-task"></span>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  name: 'App'
+  
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

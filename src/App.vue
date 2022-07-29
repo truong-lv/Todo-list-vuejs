@@ -3,12 +3,11 @@
     <h1 class="app-header">Vue TODO LIST</h1>
 
     <div class="add-task">
-      <input type="text" placeholder="Add new task" class="task-input" v-model="tasks.name" @keyup.enter="newItem">
-      <input type="submit" class="submit-task" value="" title="add-task" @click="newItem">
+      <input type="text" placeholder="Add new task" class="task-input" v-model="taskName" @keyup.enter="submitItem">
+      <input type="submit" class="submit-task" value="" title="add-task" @click="submitItem">
     </div>
-
     <ul class="task-list">
-      <li class="task-list-item" v-for="task in tasks"
+      <li class="task-list-item" v-for="(task,index) in tasks"
                 v-bind:key="task.id" >
         <label class="task-list-item-label">
           <input type="checkbox"
@@ -17,7 +16,7 @@
           <span>{{task.name}}</span>
         </label>
         <div class="task-list-control">
-          <span class="edit-btn" title="edit-task" @click="deleteItem(task)">{{task.del}}</span>
+          <span class="edit-btn" title="edit-task" @click="editItem(index)">{{task.del}}</span>
         <span class="delete-btn" title="delete-task" @click="deleteItem(task)">{{task.del}}</span>
         </div>
         
@@ -29,39 +28,60 @@
 <script>
 import localAdapter from './LocalStorangeHelper'
 
-
 export default {
   name: 'App',
   data(){
     return {
-      title:' To do list',
+      taskName:'',
+      editIndex:null,
       tasks:[]
     }
   },
   methods:{
-    newItem: function(){
-      if(!this.tasks.name){
+    submitItem: function(){
+      if(!this.taskName){
         return
       }
-      const item={
-        name:this.tasks.name,
-        del:'',
-        isDone:false
+
+      if(this.editIndex===null){
+        const item={
+          name:this.taskName,
+          del:'',
+          isDone:false
+        }
+        this.tasks.push(item)
+        localAdapter.saveTask(this.tasks)
+      }else{
+        this.tasks[this.editIndex].name=this.taskName;
+        this.editIndex=null;
       }
-      this.tasks.push(item)
-      localAdapter.saveTask(this.tasks)
-      this.tasks.name='';
+      
+      this.taskName='';
     },
+
     doneItem: function(){
       localAdapter.saveTask(this.tasks)
     },
+
     deleteItem: function(task){
       this.tasks.splice(this.tasks.indexOf(task),1);
-      localAdapter.saveTask(this.tasks)
+    },
+
+    editItem: function(index){
+      this.taskName=this.tasks[index].name;
+      this.editIndex=index;
+    }
+  },
+  watch:{
+    tasks(newTasks){
+      localAdapter.saveTask(newTasks)
     }
   },
   created(){
-    this.tasks=localAdapter.getTask()
+    if(localAdapter.getTask()){
+      this.tasks=localAdapter.getTask()
+
+    }
   }
 }
 </script>

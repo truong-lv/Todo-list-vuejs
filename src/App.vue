@@ -28,7 +28,7 @@
 <script>
 import localAdapter from './LocalStorangeHelper'
 // this is feature change
-// this í release change
+// this is release change(hot fix update)
 export default {
   name: 'App',
   data(){
